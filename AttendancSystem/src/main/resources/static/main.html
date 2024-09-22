@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>人事管理系统 - 主界面</title>
+  <link rel="stylesheet" href="/css/user.css">
+</head>
+<body>
+<div class="container">
+  <!-- 侧边栏 -->
+  <aside class="sidebar">
+    <h2>导航菜单</h2>
+    <ul>
+      <li><a href="#" id="attendance-btn">考勤管理</a></li>
+      <li><a href="#" id="employee-btn">员工管理</a></li>
+      <li><a href="#" id="stationery-btn">文具设备管理</a></li>
+      <li><a href="#" id="profile-btn">个人中心</a></li>
+    </ul>
+  </aside>
+
+  <!-- 主内容区域 -->
+  <div class="main-content">
+    <header>
+      <h1>人事管理系统</h1>
+      <a href="login.html" class="logout-btn">登出</a>
+    </header>
+
+    <!-- 这里是页面内容的容器，用于局部刷新 -->
+    <section id="content-section">
+      <h2>欢迎使用人事管理系统</h2>
+      <p>请选择左侧的模块以开始管理。</p>
+    </section>
+  </div>
+</div>
+
+<script>
+  // 监听侧边栏按钮，局部刷新加载页面
+  document.getElementById('employee-btn').addEventListener('click', function() {
+    fetch('/api/users')
+            .then(response => response.json())
+            .then(data => {
+              let contentSection = document.getElementById('content-section');
+              contentSection.innerHTML = `
+                        <h2>员工管理</h2>
+                        <table border="1" cellpadding="10" cellspacing="0">
+                            <tr>
+                                <th>ID</th>
+                                <th>用户名</th>
+                                <th>角色</th>
+                                <th>操作</th>
+                            </tr>
+                            ${data.map(user => `
+                                <tr>
+                                    <td>${user.id}</td>
+                                    <td>${user.username}</td>
+                                    <td>${user.role}</td>
+                                    <td>${generateActionButtons(user)}</td>
+                                </tr>
+                            `).join('')}
+                        </table>
+                        <button id="add-user-btn">添加用户</button>
+                    `;
+
+              // 为每个删除按钮添加事件监听器
+              data.forEach(user => {
+                let deleteBtn = document.getElementById(`delete-btn-${user.id}`);
+                if (deleteBtn) {
+                  deleteBtn.addEventListener('click', function() {
+                    deleteUser(user.id);
+                  });
+                }
+              });
+
+              // 添加用户按钮事件
+              document.getElementById('add-user-btn').addEventListener('click', function() {
+               window.location.href = 'adduser.html';
+              });
+            });
+  });
+
+  let currentUserRole;
+  function fetchUserRole() {
+    fetch('/api/currentRole')
+            .then(response => response.text())
+            .then(role => {
+              currentUserRole = role; // 存储用户角色
+              console.log("当前用户角色:", currentUserRole);// 存储用户角色
+            })
+            .catch(error => console.error('获取角色失败:', error));
+  }
+  window.onload = function (){
+    fetchUserRole();
+  };
+  // 生成操作按钮，根据角色控制
+  function generateActionButtons(user) {
+    // 这是当前登录用户的角色，实际项目中从后端获取
+    if (currentUserRole === 'PG') {
+      return '无操作权限';
+    } else if (currentUserRole === 'SYSTEM' && user.role === 'PM') {
+      return `<button id="delete-btn-${user.id}">删除PM</button>`;
+    } else if (currentUserRole === 'PM' && user.role === 'PG') {
+      return `<button id="delete-btn-${user.id}">删除PG</button>`;
+    }
+    return '*';
+  }
+
+  // 删除用户
+  function deleteUser(userId) {
+    fetch(`/api/users/${userId}`, {
+      method: 'DELETE'
+    })
+            .then(response => {
+              if (response.ok) {
+                alert('删除成功');
+                // 重新加载员工管理模块
+                document.getElementById('employee-btn').click();
+              } else {
+                alert('删除失败');
+              }
+            });
+  }
+
+</script>
+</body>
+</html>

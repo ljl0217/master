@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>注册</title>
+  <link rel="stylesheet" href="/css/login.css">
+</head>
+<body>
+<header>
+  <h1>人事管理系统注册</h1>
+</header>
+<main>
+  <!-- 注册表单 -->
+  <section>
+    <h2>注册</h2>
+    <form id="registerForm">
+      <input type="text" id="registerUsername" placeholder="用户名" required>
+      <input type="password" id="registerPassword" placeholder="密码" required>
+      <select id="registerRole">
+        <option value="system">SYSTEM</option>
+        <option value="PM">PM</option>
+        <option value="PG">PG</option>
+      </select>
+      <button type="submit">注册</button>
+    </form>
+    <div id="registerMessage"></div>
+  </section>
+</main>
+
+<script>
+  // 注册请求
+  document.getElementById('registerForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const username = document.getElementById('registerUsername').value;
+    const password = document.getElementById('registerPassword').value;
+    const role = document.getElementById('registerRole').value;
+
+    fetch('/api/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ username, password, role })
+    }).then(response => response.text())
+            .then(message => {
+              document.getElementById('registerMessage').innerText = message;
+              if (message === 'Registration successful.') {
+                alert("注册成功！现在你可以登录了");
+                window.location.href = 'login.html'; // 注册成功后跳转到登录页面
+              }
+            });
+  });
+</script>
+</body>
+</html>

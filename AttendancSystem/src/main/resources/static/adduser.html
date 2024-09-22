@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>新增用户</title>
+  <link rel="stylesheet" href="/css/login.css">
+</head>
+<body>
+<header>
+  <h1>人事管理系统</h1>
+</header>
+<main>
+  <!-- 注册表单 -->
+  <section>
+    <h2>新增用户</h2>
+    <form id="addUserForm">
+      <input type="text" id="addUsername" placeholder="用户名" required>
+      <input type="password" id="addUserPassword" placeholder="密码" required>
+      <select id="addUserRole">
+        <option value="system">SYSTEM</option>
+        <option value="PM">PM</option>
+        <option value="PG">PG</option>
+      </select>
+      <button type="submit">提交</button>
+    </form>
+    <div id="addUserMessage"></div>
+  </section>
+</main>
+
+<script>
+  // 注册请求
+  document.getElementById('addUserForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const username = document.getElementById('addUsername').value;
+    const password = document.getElementById('addUserPassword').value;
+    const role = document.getElementById('addUserRole').value;
+
+    fetch('/api/users', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ username, password, role })
+    }).then(response => response.text())
+            .then(message => {
+              document.getElementById('addUserMessage').innerText = message;
+              if (message === '用户添加成功') {
+                window.location.href = 'main.html'; // 注册成功后跳转到登录页面
+              }
+              else{
+                window.alert("用户添加失败");
+              }
+            });
+  });
+</script>
+</body>
+</html>

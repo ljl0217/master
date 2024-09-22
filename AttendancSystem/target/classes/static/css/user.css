@@ -1,0 +1,141 @@
+/* 页面整体布局 */
+html, body {
+    height: 100%; /* 让整个页面占据100%高度 */
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f0f2f5; /* 背景颜色 */
+}
+
+.container {
+    display: flex;
+    height: 100%; /* 让主容器占满整个页面 */
+}
+
+/* 侧边栏样式 */
+.sidebar {
+    width: 220px; /* 侧边栏宽度 */
+    padding: 20px; /* 内边距 */
+    background-color: #007BFF; /* 侧边栏背景颜色 */
+    color: white; /* 侧边栏文本颜色 */
+    border-right: 1px solid #ddd; /* 边框 */
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* 阴影效果 */
+}
+
+.sidebar h2 {
+    font-size: 22px;
+    margin-bottom: 20px;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar ul li {
+    margin: 15px 0; /* 增加间隔 */
+}
+
+.sidebar ul li a {
+    text-decoration: none;
+    color: white; /* 链接颜色 */
+    font-weight: bold;
+    transition: color 0.3s; /* 平滑过渡 */
+}
+
+.sidebar ul li a:hover {
+    color: #e0e0e0; /* 悬停效果 */
+}
+
+/* 主内容区域样式 */
+.main-content {
+    flex-grow: 1; /* 主内容区域占据剩余空间 */
+    padding: 20px;
+    background-color: #fff; /* 主内容区域背景颜色 */
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header h1 {
+    font-size: 26px;
+    color: #333;
+}
+
+.logout-btn {
+    background-color: #dc3545; /* 登出按钮颜色 */
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
+
+.logout-btn:hover {
+    background-color: #c82333; /* 悬停效果 */
+}
+
+/* 内容区域样式 */
+#content-section {
+    margin-top: 20px;
+}
+
+/* 表格样式 */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.table th, .table td {
+    padding: 12px;
+    text-align: left;
+    border: 1px solid #ddd; /* 边框颜色 */
+}
+
+.table th {
+    background-color: #007BFF; /* 表头背景颜色 */
+    color: white;
+}
+
+.table tr:nth-child(even) {
+    background-color: #f2f2f2; /* 偶数行背景颜色 */
+}
+
+.table tr:hover {
+    background-color: #ddd; /* 悬停效果 */
+}
+
+/* 按钮样式 */
+.button {
+    background-color: #007BFF; /* 按钮背景颜色 */
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.button:hover {
+    background-color: #0056b3; /* 悬停效果 */
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column; /* 小屏幕下垂直布局 */
+    }
+
+    .sidebar {
+        width: 100%; /* 侧边栏宽度100% */
+        border-right: none; /* 去掉边框 */
+    }
+
+    .main-content {
+        padding: 10px; /* 减少内边距 */
+    }
+}
